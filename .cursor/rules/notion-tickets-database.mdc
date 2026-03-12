@@ -1,0 +1,14 @@
+---
+description: Use only the "Task Tracker" database for Notion ticket fetch/create; resolve by name.
+alwaysApply: true
+---
+
+# Notion tickets database
+
+When **fetching** or **creating** tickets/pages in Notion (e.g. via **feature-ticket**, **bug-report**, or any flow that reads or writes to a Tasks/ticket database):
+
+1. **Use only the database named "Task Tracker".** Do not use or prompt for any other database name.
+2. **Resolve the database by name.** Call the Notion MCP **notion-search** tool with query `"Task Tracker"` and `query_type` `"internal"`; use the first **database** result. Do not hardcode a database URL or page ID.
+3. **Then** use **notion-fetch** on that database (or its URL/ID from search) to get schema/data sources, and use **notion-create-pages** (or other tools) with the resolved database/data source.
+
+**Reference:** `docs/notion-tickets-setup.md` for the full resolution flow.

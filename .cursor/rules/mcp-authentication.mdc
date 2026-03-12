@@ -1,0 +1,47 @@
+---
+description: Always use the currently authenticated MCP user (Notion, GitHub, etc.) for workspace operations and avoid hardcoded identities
+alwaysApply: true
+---
+
+# MCP authentication and identity
+
+Always operate as the **currently authenticated MCP user** for all MCP-backed services (Notion, GitHub, etc.). Do **not** hardcode user identities, tokens, or account assumptions in code, rules, or skills.
+
+## General rules
+
+1. **Never hardcode identity or tokens**
+   - Do not bake in user emails, usernames, API tokens, workspace IDs, or account-specific identifiers.
+   - Always rely on the MCP server’s current authentication context.
+
+2. **Always use the current MCP session**
+   - For any operation that depends on Notion, GitHub, or other MCP-backed services, assume the active, logged-in MCP user is the source of truth.
+   - Do not attempt to cache or persist identity outside of what MCP already exposes.
+
+3. **Authenticate via MCP tools when needed**
+   - If a task depends on Notion data or tickets, follow `notion-mcp-auth.mdc` and trigger the Notion MCP auth flow first (so the **current user** logs in).
+   - If a task depends on GitHub (e.g. reviewing PRs, posting comments), ensure GitHub MCP is connected using the `ensure-notion-github-connected` skill and its referenced workflows so actions run as the **current GitHub MCP user**.
+
+4. **PR review and GitHub actions**
+   - When reviewing PRs, posting comments, or interacting with GitHub via MCP, always:
+     - Use the GitHub MCP server (e.g. `user-github`) with no hardcoded user identity.
+     - Rely on the `get_me` or equivalent identity tool only to *read* who is currently authenticated, never to enforce a specific user.
+   - Any PR review workflows (e.g. `.cursor/skills/pr-review-skill`) must act as “the user currently logged into GitHub MCP”, not as a fixed account.
+
+5. **Notion actions and tickets**
+   - When querying or updating Notion (e.g. Task Tracker tickets), always:
+     - Use the Notion MCP server (e.g. `user-notion` / `plugin-notion-workspace-notion`) with the active auth session.
+     - Resolve databases by name (per `notion-tickets-database.mdc`) instead of hardcoded IDs tied to a single user.
+   - All Notion operations must assume the workspace and permissions of the **currently authenticated Notion MCP user**.
+
+6. **Error handling when not authenticated**
+   - If an MCP call fails due to missing/expired auth, do **not** fabricate results or assume a default account.
+   - Clearly tell the user that the corresponding MCP (Notion or GitHub) is not connected or needs re-authentication, and instruct them to complete login as described in the relevant workflow docs.
+
+7. **Docs and skills alignment**
+   - Keep this rule aligned with:
+     - `docs/notion-mcp-workflow.md`
+     - `docs/github-mcp-workflow.md`
+     - `.cursor/skills/ensure-notion-github-connected/SKILL.md`
+     - `.cursor/skills/pr-review-skill/SKILL.md`
+   - When updating those workflows, ensure they remain consistent with the principle: **always act as the current MCP-authenticated user, never a hardcoded identity**.
+

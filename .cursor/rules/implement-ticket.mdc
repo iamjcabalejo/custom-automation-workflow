@@ -1,0 +1,23 @@
+---
+description: When implementing a Notion ticket (implement-ticket command or skill), apply coding rules and load backend-architect, frontend-architect, backend-reviewer, frontend-reviewer.
+alwaysApply: false
+---
+
+# Implement ticket
+
+When the user runs the **implement-ticket** command or asks to **implement a ticket** (by No. ID, page URL, or page ID):
+
+1. **Follow the workflow** in `.cursor/skills/implement-ticket/SKILL.md`. That skill is the single source of truth for fetch → plan → code → review and Notion status updates.
+
+2. **Skills required for implementation and review:**
+   - **Code phase:** Read and apply **backend-architect** and **frontend-architect** from the agent skills list. Use backend-architect for APIs, databases, server-side logic; frontend-architect for UI, components, accessibility, client-side code.
+   - **Review phase:** Read and apply **backend-reviewer** and **frontend-reviewer** from the agent skills list. Use backend-reviewer for API/server/DB review and rework list; frontend-reviewer for UI/a11y/performance review and rework list.
+
+3. **Coding rules (Code and Review):**
+   - Adhere to `core-standards.mdc` (type safety, error handling, naming, function design).
+   - Adhere to project General Rules (SOLID, 12-factor, security, error handling, no hard-coded secrets).
+   - Validate at boundaries; parameterized queries; explicit errors; no scope creep beyond the plan.
+
+4. **Cycle discipline:** Do not skip Plan or Review. Plan must be written (e.g. `docs/plans/<ticket>.md`) and complete before Code. Review must produce a rework list with severity (Critical / Suggestion / Nice to have). Loop on Critical rework until production ready.
+
+**Reference:** `.cursor/skills/implement-ticket/SKILL.md`, `.cursor/rules/compounding-dev-cycle.mdc`

@@ -1,0 +1,20 @@
+---
+description: Ensure Notion MCP is authenticated when the task involves Notion (tickets, search, databases)
+alwaysApply: true
+---
+
+# Notion MCP authentication
+
+When the user asks to **use Notion**, **access tickets in Notion**, **query a Notion database**, **search Notion**, or when the task clearly depends on Notion data:
+
+1. **Authenticate first.** Call the Notion MCP auth tool so the current user can complete OAuth if needed:
+   - **Server:** `plugin-notion-workspace-notion`
+   - **Tool:** `mcp_auth`
+   - **Arguments:** `{}`
+   - Use the MCP tool-calling interface (e.g. `call_mcp_tool`) with the above. If Cursor shows that this server needs authentication (e.g. STATUS indicates it), do this before any other Notion operations.
+
+2. **Then proceed.** After auth has been triggered (and the user completes any browser sign-in), use the Notion tools (database query, search, etc.) as needed for the task.
+
+3. **If the user only wants to set up or document auth:** Point them to `docs/notion-mcp-workflow.md` and ensure this rule and the workflow doc are in sync.
+
+**Reference:** Full workflow and one-time setup are in `docs/notion-mcp-workflow.md`.
