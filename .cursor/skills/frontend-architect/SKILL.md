@@ -1,48 +1,62 @@
 ---
-name: frontend-architect
-description: Guides frontend implementation and review for UI, components, state, styling, and accessibility. Apply during implement-ticket Code phase for frontend-focused tickets; use with backend-architect when a ticket spans both.
+name: frontend-architect-skillset
+description: Frontend skillset entry point for UI and client-side work. Use when implementing or reviewing components, pages, styling, state, accessibility, or frontend testability.
 ---
 
-# Frontend Architect
+# Frontend Skillset
 
-Use this skill when implementing or reviewing **frontend** work: UI, components, client state, styling, and accessibility. For API/server/database work, use **backend-architect** instead. For full-ticket flow, follow `.cursor/skills/implement-ticket/SKILL.md` and load both architect skills in the Code phase; match work to frontend vs backend and apply the corresponding guidance.
+Use this as the **entry point** for frontend tickets and frontend sections of full-stack tickets. Then load the specific skills below that match the task context.
 
-## When to use Frontend vs Backend Architect
+## When to use
 
-| Area | Use this skill (Frontend Architect) | Use Backend Architect |
-|------|--------------------------------------|------------------------|
-| UI, pages, views | ✓ | — |
-| Components (React, Vue, etc.) | ✓ | — |
-| Client state (React state, context, stores) | ✓ | — |
-| Styling (CSS, Tailwind, design tokens) | ✓ | — |
-| Accessibility (a11y), keyboard, screen readers | ✓ | — |
-| Client-side validation, forms | ✓ | — |
-| API routes, server handlers | — | ✓ |
-| Database queries, migrations | — | ✓ |
-| Auth/session server-side | — | ✓ |
-| Background jobs, queues | — | ✓ |
-| Full-stack ticket | Apply both; frontend for UI/client, backend for API/DB. | Apply both. |
+- UI, pages, components, client state, styling, accessibility, or client-side behavior.
+- Frontend parts of implement-ticket work in `.cursor/skills/implement-ticket/SKILL.md`.
+- Review/Test of frontend changes (correctness, accessibility, performance, testability).
 
-When in doubt: if the change is visible in the browser or affects how users interact with the app, treat it as frontend. If it affects servers, databases, or internal APIs, treat it as backend.
+Use `backend-architect` for API/server/database work.
 
-## Scope and responsibilities
+## Frontend vs backend boundary
 
-- **Component structure:** Prefer small, single-purpose components; composition over large monoliths. Keep components under ~30 lines of JSX where practical; extract subcomponents or hooks when logic grows.
-- **State management:** Keep state close to where it’s used; lift only when needed. Prefer explicit state over implicit (no magic globals). Document non-obvious state flows.
-- **Styling:** Follow project conventions (e.g. Tailwind, CSS modules, design system). Avoid inline styles for layout/theme; use design tokens or shared variables. Prefer responsive and accessible defaults.
-- **Accessibility:** Semantic HTML; ARIA only when necessary. Keyboard navigable; focus order and visible focus. Sufficient color contrast and non-color cues. Label form controls; provide alt text for meaningful images.
-- **Types and validation:** Use strict TypeScript; no `any` for public props or API boundaries. Validate user input at the boundary (forms, URL params); sanitize before render when needed.
-- **Security:** No secrets in client bundle. Validate/sanitize output that re-renders user content. Prefer parameterized API calls; avoid building HTML/SQL from user input.
-- **Performance:** Lazy-load heavy UI when appropriate; avoid unnecessary re-renders. Prefer stable keys and memoization only where profiling shows benefit.
+| Area | Frontend skillset | Backend architect |
+|------|--------------------|-------------------|
+| UI, pages, components | Yes | No |
+| Client state and forms | Yes | No |
+| Styling and design-system usage | Yes | No |
+| Accessibility and keyboard UX | Yes | No |
+| API routes and server handlers | No | Yes |
+| Database queries and migrations | No | Yes |
+| Auth/session server-side | No | Yes |
+| Background jobs and queues | No | Yes |
+| Full-stack ticket | Apply both (split by layer) | Apply both (split by layer) |
 
-## Coding rules (frontend)
+## Skills to load by context
 
-- **Naming:** Components PascalCase; hooks and functions camelCase; booleans `isLoading`, `hasError`; event handlers `handle*` or `on*`.
-- **Errors:** Handle loading and error states in UI; never leave empty catch or unhandled rejections. Show user-facing messages where appropriate.
-- **Files:** One main component per file; colocate tests or place in `__tests__` per project convention.
-- **Dependencies:** Prefer platform and framework primitives; add libraries only when they clearly reduce complexity or match project standards.
+| Skill | Path | Load when |
+|-------|------|-----------|
+| `accessibility-checklist` | `~/.codex/skills/accessibility-checklist/SKILL.md` | Building/reviewing interactive UI, forms, keyboard flow, or semantic structure |
+| `performance-profiling` | `~/.codex/skills/performance-profiling/SKILL.md` | Investigating render cost, bundle size, or responsiveness regressions |
+| `refactoring-checklist` | `~/.codex/skills/refactoring-checklist/SKILL.md` | Restructuring components/hooks while preserving behavior |
+| `e2e-playwright` | `~/.codex/skills/e2e-playwright/SKILL.md` | Creating or reviewing browser-level flows and selectors |
+| `code-review` | `~/.codex/skills/code-review/SKILL.md` | Performing focused frontend review and rework recommendations |
+
+## Operating guidance
+
+1. Read this file first.
+2. Identify which task areas are in scope (UI, state, a11y, perf, tests, review).
+3. Load only the matching skills from the table above.
+4. Follow project rules: `core-standards.mdc` and `compounding-dev-cycle.mdc`.
+5. For implement-ticket flow, keep scope aligned with the plan and acceptance criteria.
+
+## Frontend implementation standards
+
+- Keep components focused; extract hooks/helpers when logic becomes hard to follow.
+- Handle loading, empty, and error states explicitly in user-visible flows.
+- Prefer semantic HTML and keyboard-accessible controls before custom ARIA patterns.
+- Avoid unnecessary dependencies; prefer framework/platform primitives first.
+- Keep type boundaries explicit; avoid `any` for props or cross-layer contracts.
 
 ## References
 
-- Implement-ticket: `.cursor/skills/implement-ticket/SKILL.md`
-- Project General Rules and `core-standards.mdc` (when present)
+- `.cursor/skills/implement-ticket/SKILL.md`
+- `.cursor/rules/compounding-dev-cycle.mdc`
+- `.cursor/rules/core-standards.mdc`
